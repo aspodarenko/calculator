@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">siteGuard</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="start">Start</string>
+    <string name="stop">Stop</string>
+    <string name="cant_be_determined">"Can't be determined"</string>
+    <string name="menu_settings">Settings</string>
+    <string name="url_title">url</string>
+    <string name="site_url_summery">site url</string>
+    <string name="url_key">url</string>
+    <string name="time_to_refresh">url_title</string>
+    <string name="time_to_refresh_summery">time to refresh</string>
+    <string name="time_to_refresh_key">time_to_refresh</string>
+
+</resources>
