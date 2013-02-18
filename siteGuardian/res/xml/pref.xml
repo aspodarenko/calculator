@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
     <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-        <EditTextPreference android:title="@string/url_title" android:summary="@string/site_url_summery" android:key="@string/url_key"/>
+        <EditTextPreference android:title="@string/url_title" android:summary="@string/site_url_summery" android:key="@string/url_key" android:defaultValue="http://youtube.com"/>
         <EditTextPreference android:title="@string/time_to_refresh" android:summary="@string/time_to_refresh_summery" android:defaultValue="3" android:key="@string/time_to_refresh_key"/>
     </PreferenceScreen>

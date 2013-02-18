@@ -91,7 +91,9 @@ public class CheckSiteService extends Service {
         }
 
             public Boolean is_online(String url) {
-
+                if(url == null){
+                    return false;
+                }
                 ConnectivityManager cm = (ConnectivityManager)
                         getSystemService(Context.CONNECTIVITY_SERVICE);
                 NetworkInfo networkInfo = cm.getActiveNetworkInfo();

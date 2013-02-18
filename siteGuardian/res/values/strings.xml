@@ -10,7 +10,7 @@
     <string name="url_title">url</string>
     <string name="site_url_summery">site url</string>
     <string name="url_key">url</string>
-    <string name="time_to_refresh">url_title</string>
+    <string name="time_to_refresh">time to refresh</string>
     <string name="time_to_refresh_summery">time to refresh</string>
     <string name="time_to_refresh_key">time_to_refresh</string>
 

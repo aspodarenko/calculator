@@ -112,12 +112,15 @@ public class MainActivity extends Activity implements View.OnClickListener {
             Cursor cursor = SharedObjectManager.getInstance().getDb(resultTextView.getContext()).query(SiteGuardSQLHelper.STATUS_TABLE_NAME,
                     null, sqlWhere.toString(), null, null, null, null);
             String resultStatus = getString(R.string.cant_be_determined);
-            if (cursor != null) {
+            if (cursor != null ) {
+                if(cursor.getCount() > 0){
                 cursor.moveToFirst();
-                resultStatus = "Status: " + cursor.getString(cursor.getColumnIndex(SiteGuardSQLHelper.RESULT_STATUS_COLUMN))
-                        + " Time: " + new Date(Long.valueOf(cursor.getString(cursor.getColumnIndex(SiteGuardSQLHelper.TIMESTAMP_COLUMN))));
+                    resultStatus = "Status: " + cursor.getString(cursor.getColumnIndex(SiteGuardSQLHelper.RESULT_STATUS_COLUMN))
+                            + " Time: " + new Date(Long.valueOf(cursor.getString(cursor.getColumnIndex(SiteGuardSQLHelper.TIMESTAMP_COLUMN))));
+                }
                 cursor.close();
             }
+
             return resultStatus;
         }
 
