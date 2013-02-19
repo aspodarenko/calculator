@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+    <item android:id="@+id/settings" android:showAsAction="ifRoom|withText"
+           android:title="@string/settings" ></item>
+    <item android:id="@+id/viewAllItems" android:title="@string/viewAllListItemTitle" android:showAsAction="ifRoom|withText"></item>
+    <item android:id="@+id/viewFailItems" android:title="@string/viewFailListItemTitle" android:showAsAction="ifRoom|withText"></item>
+    <item android:id="@+id/diagram" android:title="@string/siteAvailableTitle" android:showAsAction="ifRoom|withText"></item>
+</menu>
