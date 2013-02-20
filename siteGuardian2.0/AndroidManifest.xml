@@ -27,5 +27,11 @@
         <service android:name="com.example.siteGuardian.CheckSiteService">
 
         </service>
-    </application>
-</manifest> 
+        <provider android:authorities="com.example.siteGuardian.contentprovider"
+                  android:enabled="true"
+        android:exported="true"
+        android:grantUriPermissions="true"
+        android:name=".DbContentProvider">
+        </provider>
+</application>
+        </manifest>

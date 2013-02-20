@@ -17,6 +17,7 @@ public class SiteGuardSQLHelper extends SQLiteOpenHelper {
     public static final String STATUS_TABLE_NAME = "STATUS_CHECKING_RESULTS";
     public static final String RESULT_STATUS_COLUMN = "RESULT_STATUS_COLUMN";
     public static final String TIMESTAMP_COLUMN = "TIMESTAMP_COLUMN";
+    public static final String ID_COLUMN = BaseColumns._ID;
 
     public SiteGuardSQLHelper(Context context) {
         super(context, "siteGuardDB", null, 1);

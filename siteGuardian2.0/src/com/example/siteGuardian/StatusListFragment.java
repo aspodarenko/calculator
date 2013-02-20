@@ -6,6 +6,9 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.ListFragment;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
 import android.support.v4.widget.SimpleCursorAdapter;
 import android.text.format.DateUtils;
 import android.view.View;
@@ -19,8 +22,9 @@ import android.widget.TextView;
  * Time: 10:29 AM
  * To change this template use File | Settings | File Templates.
  */
-public class StatusListFragment  extends ListFragment implements SimpleCursorAdapter.ViewBinder {
+public class StatusListFragment  extends ListFragment implements SimpleCursorAdapter.ViewBinder, LoaderManager.LoaderCallbacks<Cursor> {
 
+    public static final String IS_ONLY_FAILED_STATUSES = "isOnlyFailedStatuses";
     private Cursor cursor;
     private SimpleCursorAdapter cursorAdapter;
 
@@ -30,23 +34,26 @@ public class StatusListFragment  extends ListFragment implements SimpleCursorAda
     };
 
     private int[] TO = {R.id.statusText,R.id.checkingTime };
+    private CursorLoader loader;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-    }
-
-    public void refreshList(Boolean isOnlyFailStatuses) {
-        String sqlWhere = null;
-        if(isOnlyFailStatuses){
-           sqlWhere = SiteGuardSQLHelper.RESULT_STATUS_COLUMN +"='"+CheckSiteService.STATUS_FAIL+"'";
-        }
-        cursor = SharedObjectManager.getInstance().getDb(getActivity().getApplication()).query(SiteGuardSQLHelper.STATUS_TABLE_NAME,
-                null, sqlWhere, null, null, null, SiteGuardSQLHelper.TIMESTAMP_COLUMN +" DESC ");
-        cursorAdapter = new SimpleCursorAdapter(getActivity().getApplication(), R.layout.list_item,cursor,FROM,TO,0);
+        cursorAdapter = new SimpleCursorAdapter(getActivity().getApplication(), R.layout.list_item,null,FROM,TO,0);
         cursorAdapter.setViewBinder(this);
         setListAdapter(cursorAdapter);
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        initLoader();
+    }
+
+    private void initLoader() {
+        Bundle bundle = new Bundle();               //Should I create new bundle or use that I receive as parameter?
+        bundle.putBoolean(IS_ONLY_FAILED_STATUSES,false);
+        loader = (CursorLoader) getLoaderManager().initLoader(0, bundle, this);
     }
 
     @Override
@@ -64,7 +71,6 @@ public class StatusListFragment  extends ListFragment implements SimpleCursorAda
     @Override
     public void onPause() {
         super.onPause();
-        cursor.deactivate();
     }
 
     @Override
@@ -88,5 +94,37 @@ public class StatusListFragment  extends ListFragment implements SimpleCursorAda
         }
 
         return false;
+    }
+
+    @Override
+    public Loader onCreateLoader(int i, Bundle bundle) {
+        Boolean isOnlyFailedStatuses = bundle.getBoolean(IS_ONLY_FAILED_STATUSES);
+        String selection = makeSelections(isOnlyFailedStatuses);
+        return new CursorLoader(getActivity().getApplicationContext(),SiteGuardianProviderContract.CONTENT_URI,null,selection,null,null);
+    }
+
+    @Override
+    public void onLoadFinished(Loader loader, Cursor cursor) {
+       cursorAdapter.swapCursor(cursor);
+    }
+
+    @Override
+    public void onLoaderReset(Loader loader) {
+        cursorAdapter.swapCursor(null);
+    }
+
+    public void refreshList(Boolean isOnlyFailStatuses) {
+        if(loader.isStarted()){
+            loader.setSelection(makeSelections(isOnlyFailStatuses));
+            loader.forceLoad();
+        }
+    }
+
+    private String makeSelections(Boolean onlyFailedStatuses) {
+        String selection = null;
+        if(onlyFailedStatuses != null && onlyFailedStatuses){
+            selection = SiteGuardSQLHelper.RESULT_STATUS_COLUMN +"='"+ CheckSiteService.STATUS_FAIL+"'";
+        }
+        return selection;
     }
 }

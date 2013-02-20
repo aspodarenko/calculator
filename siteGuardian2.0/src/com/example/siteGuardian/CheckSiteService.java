@@ -92,7 +92,7 @@ public class CheckSiteService extends Service {
             }  else {
                 values.put(SiteGuardSQLHelper.RESULT_STATUS_COLUMN, STATUS_FAIL);
             }
-            SharedObjectManager.getInstance().getDb(app).insertOrThrow(SiteGuardSQLHelper.STATUS_TABLE_NAME,null,values);
+            getContentResolver().insert(SiteGuardianProviderContract.CONTENT_URI,values);
         }
 
             public Boolean is_online(String url) {
