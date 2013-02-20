@@ -13,13 +13,17 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-public class PieActivity extends Activity {
+public class PieActivity extends FragmentActivity implements  LoaderManager.LoaderCallbacks<Cursor> {
 
     final static String urlGoogleChart
             = "http://chart.apis.google.com/chart";
@@ -27,26 +31,25 @@ public class PieActivity extends Activity {
             = "?cht=p3&chs=400x200&chl=OK|DOWN&chd=t:";
 
 
-    ImageView pieChart;
+    private ImageView pieChart;
 
+    private CursorLoader loader;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.diagram);
         pieChart = (ImageView) findViewById(R.id.pie);
+        loader = (CursorLoader) getSupportLoaderManager().initLoader(0, null, this);
     }
 
 
     @Override
     protected void onResume() {
         super.onResume();
-        Integer[] siteAvailableStatistics = getSiteAvailableStatistics();
-        String urlRqs3DPie = urlGoogleChart
-                + urlp3Api
-                + siteAvailableStatistics[0].toString() + "," + siteAvailableStatistics[1].toString();
-
-        new PiaImageLoader().execute(urlRqs3DPie);
+        if(loader.isStarted()){
+            loader.forceLoad();
+        }
     }
 
 
@@ -76,25 +79,34 @@ public class PieActivity extends Activity {
 
     }
 
-    /*
-    result int[0] - status OK count
-    result int[1] - status FAIL count
-     */
-    public Integer[] getSiteAvailableStatistics() {
-        Integer[] result = new Integer[2];
-        result[0] = 0;
-        result[1] = 0;
-        Cursor cursor = SharedObjectManager.getInstance().getDb(this).query(SiteGuardSQLHelper.STATUS_TABLE_NAME,
-                null, null, null, null, null, null);
+
+    @Override
+    public Loader onCreateLoader(int i, Bundle bundle) {
+        return new CursorLoader(this,SiteGuardianProviderContract.CONTENT_URI,null,null,null,null);
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> cursorLoader, Cursor cursor) {
+        Integer successCount = 0;
+        Integer failCount = 0;
         cursor.moveToFirst();
         while (cursor.moveToNext()) {
             if (cursor.getString(cursor.getColumnIndex(SiteGuardSQLHelper.RESULT_STATUS_COLUMN)).equals(CheckSiteService.STATUS_OK)) {
-                result[0]++;
+                successCount++;
             } else if (cursor.getString(cursor.getColumnIndex(SiteGuardSQLHelper.RESULT_STATUS_COLUMN)).equals(CheckSiteService.STATUS_FAIL)) {
-                result[1]++;
+                failCount++;
             }
         }
-        return result;
+        String urlRqs3DPie = urlGoogleChart
+                + urlp3Api
+                + successCount.toString() + "," + failCount.toString();
+
+        new PiaImageLoader().execute(urlRqs3DPie);
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> cursorLoader) {
+
     }
 
     private class PiaImageLoader extends AsyncTask<String,Void,Bitmap> {

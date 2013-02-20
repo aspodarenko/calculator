@@ -100,7 +100,7 @@ public class StatusListFragment  extends ListFragment implements SimpleCursorAda
     public Loader onCreateLoader(int i, Bundle bundle) {
         Boolean isOnlyFailedStatuses = bundle.getBoolean(IS_ONLY_FAILED_STATUSES);
         String selection = makeSelections(isOnlyFailedStatuses);
-        return new CursorLoader(getActivity().getApplicationContext(),SiteGuardianProviderContract.CONTENT_URI,null,selection,null,null);
+        return new CursorLoader(getActivity().getApplicationContext(),SiteGuardianProviderContract.CONTENT_URI,null,selection,null,SiteGuardSQLHelper.TIMESTAMP_COLUMN+" DESC");
     }
 
     @Override
