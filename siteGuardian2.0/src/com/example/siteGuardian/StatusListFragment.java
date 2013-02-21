@@ -1,10 +1,7 @@
 package com.example.siteGuardian;
 
-
-
 import android.database.Cursor;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.ListFragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
@@ -25,7 +22,6 @@ import android.widget.TextView;
 public class StatusListFragment  extends ListFragment implements SimpleCursorAdapter.ViewBinder, LoaderManager.LoaderCallbacks<Cursor> {
 
     public static final String IS_ONLY_FAILED_STATUSES = "isOnlyFailedStatuses";
-    private Cursor cursor;
     private SimpleCursorAdapter cursorAdapter;
 
     private String[] FROM = {
@@ -60,17 +56,6 @@ public class StatusListFragment  extends ListFragment implements SimpleCursorAda
     public void onResume() {
         super.onResume();
         refreshList(false);
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        cursor.close();
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
     }
 
     @Override

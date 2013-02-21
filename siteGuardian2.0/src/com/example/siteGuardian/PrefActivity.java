@@ -3,8 +3,6 @@ package com.example.siteGuardian;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
 
-import java.util.prefs.Preferences;
-
 /**
  * Created with IntelliJ IDEA.
  * User: a.spodarenko

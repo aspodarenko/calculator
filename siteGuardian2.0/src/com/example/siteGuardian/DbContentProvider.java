@@ -21,8 +21,8 @@ import java.util.HashSet;
  */
 public class DbContentProvider extends ContentProvider {
 
-    // database
-    private SiteGuardSQLHelper dbHelper;
+
+    private SiteGuardianApplication application;
 
     private static final UriMatcher sURIMatcher = new UriMatcher(UriMatcher.NO_MATCH);
     static {
@@ -32,7 +32,7 @@ public class DbContentProvider extends ContentProvider {
 
     @Override
     public boolean onCreate() {
-        dbHelper = new SiteGuardSQLHelper(getContext());
+        application = (SiteGuardianApplication)getContext().getApplicationContext();
         return false;
     }
 
@@ -59,7 +59,7 @@ public class DbContentProvider extends ContentProvider {
                 throw new IllegalArgumentException("Unknown URI: " + uri);
         }
 
-        Cursor cursor = queryBuilder.query(SharedObjectManager.getInstance().getDb(getContext()), projection, selection,
+        Cursor cursor = queryBuilder.query(application.getDb(), projection, selection,
                 selectionArgs, null, null, sortOrder);
 
         cursor.setNotificationUri(getContext().getContentResolver(), uri);
@@ -78,7 +78,7 @@ public class DbContentProvider extends ContentProvider {
         long id = 0;
         switch (uriType) {
             case SiteGuardianProviderContract.STATUSES:
-                id = SharedObjectManager.getInstance().getDb(getContext()).insert(SiteGuardSQLHelper.STATUS_TABLE_NAME, null, values);
+                id = application.getDb().insert(SiteGuardSQLHelper.STATUS_TABLE_NAME, null, values);
                 break;
             default:
                 throw new IllegalArgumentException("Unknown URI: " + uri);
@@ -94,7 +94,7 @@ public class DbContentProvider extends ContentProvider {
         int rowsDeleted = 0;
         switch (uriType) {
             case SiteGuardianProviderContract.STATUSES:
-                rowsDeleted = SharedObjectManager.getInstance().getDb(getContext()).delete(SiteGuardSQLHelper.STATUS_TABLE_NAME, selection,
+                rowsDeleted = application.getDb().delete(SiteGuardSQLHelper.STATUS_TABLE_NAME, selection,
                         selectionArgs);
                 break;
             case SiteGuardianProviderContract.STATUS:
@@ -111,7 +111,7 @@ public class DbContentProvider extends ContentProvider {
                       String[] selectionArgs) {
 
         int uriType = sURIMatcher.match(uri);
-        SQLiteDatabase db = SharedObjectManager.getInstance().getDb(getContext());
+        SQLiteDatabase db = application.getDb();
         int rowsUpdated = 0;
         switch (uriType) {
             case SiteGuardianProviderContract.STATUSES:

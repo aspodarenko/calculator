@@ -1,12 +1,5 @@
 package com.example.siteGuardian;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.net.URLConnection;
-
-import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -19,9 +12,14 @@ import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLConnection;
 
 public class PieActivity extends FragmentActivity implements  LoaderManager.LoaderCallbacks<Cursor> {
 
@@ -141,6 +139,7 @@ public class PieActivity extends FragmentActivity implements  LoaderManager.Load
                     is = httpConn.getInputStream();
                 }
             } catch (Exception ex) {
+                //it is never happened :)
             }
 
             return is;

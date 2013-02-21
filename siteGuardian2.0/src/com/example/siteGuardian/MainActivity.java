@@ -1,35 +1,25 @@
 package com.example.siteGuardian;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Configuration;
-import android.database.Cursor;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
-import android.text.format.DateUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.SimpleCursorAdapter;
-import android.widget.TextView;
-
-import java.util.Date;
 
 public class MainActivity extends FragmentActivity implements View.OnClickListener {
 
     private Button startStopButton;
-    private Boolean isCheckerServiceStarted;
+
     private Intent serviceIntent;
     private StatusListFragment statusListFragment;
-    private static final String FRAGMENT_TAG="FRAGMENT_TAG";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        isCheckerServiceStarted = false;
+        CheckSiteService.isStarted = false;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
         startStopButton = (Button) findViewById(R.id.startStopButton);
@@ -45,7 +35,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     }
 
     private void updateSettings() {
-        if (isCheckerServiceStarted == true) {
+        if (CheckSiteService.isStarted) {
             stopService(serviceIntent);
             startService(serviceIntent);
         }
@@ -91,13 +81,13 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     public void onClick(View view) {
         if (view.getId() == R.id.startStopButton) {
             serviceIntent = new Intent(this, CheckSiteService.class);
-            if (isCheckerServiceStarted == true) {
+            if (CheckSiteService.isStarted) {
                 stopService(serviceIntent);
-                isCheckerServiceStarted = false;
+                CheckSiteService.isStarted = false;
                 startStopButton.setText(getString(R.string.start));
             } else {
                 startService(serviceIntent);
-                isCheckerServiceStarted = true;
+                CheckSiteService.isStarted = true;
                 startStopButton.setText(getString(R.string.stop));
             }
         }

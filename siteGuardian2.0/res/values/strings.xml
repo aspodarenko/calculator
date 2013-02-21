@@ -14,9 +14,9 @@
     <string name="time_to_refresh_summery">time to refresh in seconds</string>
     <string name="time_to_refresh_key">time_to_refresh</string>
 
-    <string name="viewAllListItemTitle">view all list of statuses</string>
-    <string name="viewFailListItemTitle">view only failed statuses</string>
+    <string name="viewAllListItemTitle">whole list</string>
+    <string name="viewFailListItemTitle">only failed</string>
     <string name="settings">settings</string>
-    <string name="siteAvailableTitle">site available statistics</string>
+    <string name="siteAvailableTitle">statistics</string>
     <string name="listOfStatuses">list of statuses</string>
 </resources>

@@ -1,25 +1,22 @@
 package com.example.siteGuardian;
 
-import android.app.Application;
 import android.app.Service;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.database.sqlite.SQLiteDatabase;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
-import android.provider.BaseColumns;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
+
 import java.io.IOException;
 import java.util.Date;
-import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -32,16 +29,15 @@ import java.util.TimerTask;
  */
 public class CheckSiteService extends Service {
 
+    public static Boolean isStarted;
+
     private String url;
     private Integer delayInSeconds;
     private Timer timer;
-    private SQLiteDatabase db;
-    private Application app;
 
     public String URL_KEY;
     public String TIMEOUT_KEY;
     private SharedPreferences pref;
-    private Random random;
     private static final Integer DEFAULT_TIMEOUT = 3;
     public static final String STATUS_OK="OK";
     public static final String STATUS_FAIL="DOWN";
@@ -54,9 +50,6 @@ public class CheckSiteService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-
-        random = new Random();
-        app = getApplication();
         URL_KEY = getString(R.string.url_key);
         TIMEOUT_KEY = getString(R.string.time_to_refresh_key);
         pref = PreferenceManager.getDefaultSharedPreferences(this);
@@ -86,7 +79,6 @@ public class CheckSiteService extends Service {
             }
             ContentValues values = new ContentValues();
             values.put(SiteGuardSQLHelper.TIMESTAMP_COLUMN,new Date().getTime());
-            values.put(BaseColumns._ID, random.nextInt());
             if(is_online(url)){
                 values.put(SiteGuardSQLHelper.RESULT_STATUS_COLUMN, STATUS_OK);
             }  else {
